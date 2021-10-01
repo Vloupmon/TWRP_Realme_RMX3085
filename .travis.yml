@@ -1,0 +1,52 @@
+os: linux
+dist: bionic
+language: generic
+sudo: required
+git:
+  depth: 1
+addons:
+  apt:
+    update:
+      - true
+services:
+  - docker
+before_install:
+  - docker pull fr3akyphantom/droid-builder:latest
+before_script:
+  - cd $HOME && mkdir twrp
+  - cd $HOME/twrp/ && repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+  - cd $HOME/twrp/ && repo sync
+script:
+  - cd $HOME/twrp/ && git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
+  - |
+    docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder/twrp/:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
+    cd /home/builder/twrp/
+    source build/envsetup.sh
+    # Choose build flavor as "eng" or "userdebug"
+    BUILD_FLAVOR="eng"
+    lunch omni_oppo6785-${BUILD_FLAVOR}
+    make -j$(nproc --all) recoveryimage
+    exit
+    EOF
+after_success:
+  - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
+  - cp $HOME/twrp/out/target/product/oppo6785/recovery.img $HOME/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
+  - cd $HOME/twrp/
+  - curl -s --upload-file TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img https://transfer.sh/ && echo ""
+deploy:
+  skip_cleanup: true
+  provider: releases
+  # The secret api_key will be loaded from the environment variables
+  api_key: $GitOAUTHToken
+  file_glob: true
+  file: $HOME/twrp/*.img
+  on:
+    tags: false
+    repo: Vloupmon/TWRP_Realme_RMX3085 # Optional: If you want to deploy on different repository
+    branch: master # Optional: Needs to be exact as the config branch
+branches:
+  only:
+    - master # Set travis builder branch(es) names
+  except:
+    - /^(?i:untagged)-.*$/
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
