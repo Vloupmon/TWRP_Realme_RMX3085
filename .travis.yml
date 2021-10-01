@@ -1,7 +1,6 @@
 os: linux
 dist: bionic
 language: generic
-sudo: required
 git:
   depth: 1
 addons:
@@ -12,6 +11,7 @@ services:
   - docker
 before_install:
   - docker pull fr3akyphantom/droid-builder:latest
+  - snap install git-repo
 before_script:
   - cd $HOME && mkdir twrp
   - cd $HOME/twrp/ && repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
