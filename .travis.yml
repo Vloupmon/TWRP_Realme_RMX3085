@@ -8,14 +8,18 @@ addons:
   apt:
     update:
       - true
+    packages:
+      - sudo
 services:
   - docker
 before_install:
+  - echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
   - docker pull fr3akyphantom/droid-builder:focal
   - cd $HOME && mkdir twrp
   - git config --global user.name "Vincent Loupmon"
   - git config --global user.email 6957532+Vloupmon@users.noreply.github.com
   - git config --global color.ui true
+  - 
 script:
   - |
     docker run --rm -i --user $(id -u):$(id -g) -v "${HOME}/.gitconfig:/home/builder/.gitconfig:rw,z" -v "${HOME}/twrp:/home/builder/twrp:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" -w /home/builder/twrp fr3akyphantom/droid-builder:focal sudo -s bash << EOF
