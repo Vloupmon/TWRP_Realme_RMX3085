@@ -12,14 +12,13 @@ services:
   - docker
 before_install:
   - docker pull fr3akyphantom/droid-builder:latest
-before_script:
   - cd $HOME && mkdir twrp
 script:
   - cd $HOME/twrp/ && git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
   - |
-    docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder/twrp/:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
-    pwd
-    cd /home/builder/twrp
+    docker run --priviledged --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder:bionic /bin/bash << EOF
+    ls -al
+    cd twrp
     git config --global user.name "Vincent Loupmon"
     git config --global user.email 6957532+Vloupmon@users.noreply.github.com
     git config --global color.ui true
