@@ -1,5 +1,5 @@
 os: linux
-dist: bionic
+dist: hirsute
 language: generic
 git:
   depth: 1
@@ -8,12 +8,13 @@ addons:
     update:
       - true
     packages:
+      - curl
+      - libssl-dev
       - gnupg
       - flex
       - bison
       - build-essential
       - zip
-      - curl
       - zlib1g-dev
       - gcc-multilib
       - g++-multilib
@@ -32,7 +33,6 @@ addons:
       - dosfstools
       - rsync
       - libncurses5
-      - libssl-dev
       - python3-mako
       - unzip
       - repo
