@@ -18,9 +18,9 @@ script:
   - cd $HOME/twrp/ && git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
   - |
     docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder/twrp/:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
+    cd /home/builder/twrp/
     repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
     repo sync
-    cd /home/builder/twrp/
     source build/envsetup.sh
     # Choose build flavor as "eng" or "userdebug"
     BUILD_FLAVOR="eng"
