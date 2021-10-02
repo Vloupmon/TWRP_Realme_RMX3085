@@ -50,11 +50,11 @@ before_install:
 before_script:
    # Refresh ENV variables
   - eval "$(exec /usr/bin/env -i "${SHELL}" -l -c "export")"
-  - mkdir twrp && cd twrp
+  - mkdir ${HOME}/twrp
 script:
+  - cd ${HOME}/twrp
   - repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
   - repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
-  - find vendor/ -type f | nc termbin.com 9999
   - git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
   - export ALLOW_MISSING_DEPENDENCIES=true
   - source build/envsetup.sh
@@ -64,7 +64,8 @@ script:
   - mka recoveryimage
 after_success:
   - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
-  - cp $HOME/twrp/out/target/product/oppo6785/recovery.img $HOME/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
+  - find ${HOME}/twrp/out -name "recovery.img" | nc termbin.com 9999
+  - cp `find ${HOME}/twrp/out -name "recovery.img" | head -1` $HOME/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
   - cd $HOME/twrp/
   - curl -s --upload-file TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img https://transfer.sh/ && echo ""
 deploy:
