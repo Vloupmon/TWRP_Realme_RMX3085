@@ -54,8 +54,7 @@ before_script:
 script:
   - repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
   - repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
-  - find vendor/ -type d | nc termbin.com 9999
-  - exit 1
+  - find vendor/ -type f | nc termbin.com 9999
   - git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
   - export ALLOW_MISSING_DEPENDENCIES=true
   - source build/envsetup.sh
