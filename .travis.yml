@@ -1,6 +1,7 @@
 os: linux
 dist: focal
 language: generic
+sudo: required
 git:
   depth: 1
 addons:
