@@ -16,7 +16,7 @@ before_install:
 script:
   - cd $HOME/twrp/ && git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
   - |
-    docker run --priviledged --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder:bionic /bin/bash << EOF
+    docker run --privileged --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder:bionic /bin/bash << EOF
     ls -al
     cd twrp
     git config --global user.name "Vincent Loupmon"
