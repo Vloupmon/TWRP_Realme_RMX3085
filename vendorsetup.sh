@@ -4,7 +4,4 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-
-add_lunch_combo omni_oppo6785-user
-add_lunch_combo omni_oppo6785-userdebug
-add_lunch_combo omni_oppo6785-eng
+export ALLOW_MISSING_DEPENDENCIES=true
