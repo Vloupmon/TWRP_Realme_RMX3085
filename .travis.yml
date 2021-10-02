@@ -18,8 +18,14 @@ script:
   - cd $HOME/twrp/ && git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
   - |
     docker run --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder/twrp/:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder bash << EOF
-    cd /home/builder/twrp/ && repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
-    repo sync
+    pwd
+    cd /home/builder/twrp
+    git config --global user.name "Vincent Loupmon"
+    git config --global user.email 6957532+Vloupmon@users.noreply.github.com
+    git config --global color.ui true
+    repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+    repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+    export ALLOW_MISSING_DEPENDENCIES=true
     source build/envsetup.sh
     # Choose build flavor as "eng" or "userdebug"
     BUILD_FLAVOR="eng"
