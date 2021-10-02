@@ -1,5 +1,5 @@
 os: linux
-dist: hirsute
+dist: focal
 language: generic
 git:
   depth: 1
@@ -35,12 +35,15 @@ addons:
       - libncurses5
       - python3-mako
       - unzip
-      - repo
 before_install:
   - cd $HOME
   - git config --global user.name "Vincent Loupmon"
   - git config --global user.email 6957532+Vloupmon@users.noreply.github.com
   - git config --global color.ui true
+  - mkdir -p ~/.bin
+  - PATH="${HOME}/.bin:${PATH}"
+  - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
+  - chmod a+rx ~/.bin/repo
 before_script:
   - eval "$(exec /usr/bin/env -i "${SHELL}" -l -c "export")"
   - mkdir twrp && cd twrp
