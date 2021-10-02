@@ -8,6 +8,7 @@ addons:
     update:
       - true
     packages:
+      - git-core
       - curl
       - libssl-dev
       - gnupg
@@ -15,6 +16,7 @@ addons:
       - bison
       - build-essential
       - zip
+      - unzip
       - zlib1g-dev
       - gcc-multilib
       - g++-multilib
@@ -26,7 +28,6 @@ addons:
       - libgl1-mesa-dev
       - libxml2-utils
       - xsltproc
-      - unzip
       - fontconfig
       - kpartx
       - sudo
@@ -34,17 +35,19 @@ addons:
       - rsync
       - libncurses5
       - python3-mako
-      - unzip
 before_install:
   - cd $HOME
+    # Setup .gitconfig
   - git config --global user.name "Vincent Loupmon"
   - git config --global user.email 6957532+Vloupmon@users.noreply.github.com
   - git config --global color.ui true
+    # Installing git-repo manually as it doesn't exist in Ubuntu focal's repos
   - mkdir -p ~/.bin
   - PATH="${HOME}/.bin:${PATH}"
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
   - chmod a+rx ~/.bin/repo
 before_script:
+   # Refresh ENV variables
   - eval "$(exec /usr/bin/env -i "${SHELL}" -l -c "export")"
   - mkdir twrp && cd twrp
 script:
