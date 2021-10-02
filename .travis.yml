@@ -1,7 +1,6 @@
 os: linux
-dist: focal
+dist: bionic
 language: generic
-sudo: required
 git:
   depth: 1
 addons:
@@ -9,33 +8,52 @@ addons:
     update:
       - true
     packages:
+      - gnupg
+      - flex
+      - bison
+      - build-essential
+      - zip
+      - curl
+      - zlib1g-dev
+      - gcc-multilib
+      - g++-multilib
+      - libc6-dev-i386
+      - lib32ncurses5-dev
+      - x11proto-core-dev
+      - libx11-dev
+      - lib32z1-dev
+      - libgl1-mesa-dev
+      - libxml2-utils
+      - xsltproc
+      - unzip
+      - fontconfig
+      - kpartx
       - sudo
-services:
-  - docker
+      - dosfstools
+      - rsync
+      - libncurses5
+      - libssl-dev
+      - python3-mako
+      - unzip
+      - repo
 before_install:
-  - echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-  - docker pull fr3akyphantom/droid-builder:focal
-  - cd $HOME && mkdir twrp
+  - cd $HOME
   - git config --global user.name "Vincent Loupmon"
   - git config --global user.email 6957532+Vloupmon@users.noreply.github.com
   - git config --global color.ui true
-  - 
+before_script:
+  - eval "$(exec /usr/bin/env -i "${SHELL}" -l -c "export")"
+  - mkdir twrp && cd twrp
 script:
-  - |
-    docker run --rm -i --user $(id -u):$(id -g) -v "${HOME}/.gitconfig:/home/builder/.gitconfig:rw,z" -v "${HOME}/twrp:/home/builder/twrp:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" -w /home/builder/twrp fr3akyphantom/droid-builder:focal sudo -s bash << EOF
-    PATH=$PATH:/home/builder/bin
-    eval "$(exec /usr/bin/env -i "${SHELL}" -l -c "export")"
-    repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
-    repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
-    git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
-    export ALLOW_MISSING_DEPENDENCIES=true
-    source build/envsetup.sh
+  - repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+  - repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+  - git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
+  - export ALLOW_MISSING_DEPENDENCIES=true
+  - source build/envsetup.sh
     # Choose build flavor as "eng" or "userdebug"
-    BUILD_FLAVOR="eng"
-    lunch twrp_oppo6785-${BUILD_FLAVOR}
-    mka recoveryimage
-    exit
-    EOF
+  - BUILD_FLAVOR="eng"
+  - lunch twrp_oppo6785-${BUILD_FLAVOR}
+  - mka recoveryimage
 after_success:
   - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
   - cp $HOME/twrp/out/target/product/oppo6785/recovery.img $HOME/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
