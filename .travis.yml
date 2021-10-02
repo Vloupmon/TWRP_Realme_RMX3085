@@ -13,15 +13,13 @@ services:
 before_install:
   - docker pull fr3akyphantom/droid-builder:latest
   - cd $HOME && mkdir twrp
+  - git config --global user.name "Vincent Loupmon"
+  - git config --global user.email 6957532+Vloupmon@users.noreply.github.com
+  - git config --global color.ui true
 script:
   - cd $HOME/twrp/ && git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
   - |
-    docker run --privileged --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder:bionic /bin/bash << EOF
-    ls -al
-    cd twrp
-    git config --global user.name "Vincent Loupmon"
-    git config --global user.email 6957532+Vloupmon@users.noreply.github.com
-    git config --global color.ui true
+    docker run --privileged --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "$(pwd):/home/builder/twrp:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder:bionic /bin/bash << EOF
     repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
     repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
     export ALLOW_MISSING_DEPENDENCIES=true
