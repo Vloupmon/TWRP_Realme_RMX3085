@@ -21,8 +21,8 @@ script:
   - |
     docker run --privileged --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "${HOME}/.gitconfig:/home/builder/.gitconfig" -v "$(pwd):/home/builder/twrp:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder:focal /bin/bash << EOF
     cd twrp
-    /home/builder/repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
-    /home/builder/repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+    /home/builder/bin/repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+    /home/builder/bin/repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
     export ALLOW_MISSING_DEPENDENCIES=true
     source build/envsetup.sh
     # Choose build flavor as "eng" or "userdebug"
