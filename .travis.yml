@@ -6,7 +6,7 @@ git:
 addons:
   apt:
     update:
-      - false
+      - true
     packages:
       - git-core
       - curl
