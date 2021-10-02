@@ -17,18 +17,18 @@ before_install:
   - git config --global user.email 6957532+Vloupmon@users.noreply.github.com
   - git config --global color.ui true
 script:
-  - cd $HOME/twrp/ && git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
   - |
-    docker run --privileged --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "${HOME}/.gitconfig:/home/builder/.gitconfig" -v "$(pwd):/home/builder/twrp:rw,z" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder:focal /bin/bash << EOF
+    docker run --privileged --rm -i -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) -v "${HOME}/.gitconfig:/home/builder/.gitconfig:rw" -v "$(pwd):/home/builder/twrp:rw" -v "${HOME}/.ccache:/srv/ccache:rw,z" fr3akyphantom/droid-builder:focal bash << EOF
     cd twrp
-    /home/builder/bin/repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
-    /home/builder/bin/repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+    sudo git clone https://github.com/Vloupmon/TWRP_Realme_RMX3085.git device/alps/oppo6785
+    sudo repo init --depth=1 -q -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+    sudo repo sync -c -q --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
     export ALLOW_MISSING_DEPENDENCIES=true
     source build/envsetup.sh
     # Choose build flavor as "eng" or "userdebug"
     BUILD_FLAVOR="eng"
-    lunch twrp_oppo6785-${BUILD_FLAVOR}
-    mka recoveryimage
+    sudo lunch twrp_oppo6785-${BUILD_FLAVOR}
+    sudo mka recoveryimage
     #make -j$(nproc --all) recoveryimage
     exit
     EOF
