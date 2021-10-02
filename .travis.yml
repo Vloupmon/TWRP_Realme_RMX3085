@@ -70,6 +70,7 @@ after_success:
   - cp $recovery ${HOME}/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
   - cd $HOME/twrp/
   - curl -s --upload-file TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img https://transfer.sh/ && echo ""
+deploy:
   skip_cleanup: true
   provider: releases
   # The secret api_key will be loaded from the environment variables
