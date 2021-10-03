@@ -64,9 +64,11 @@ script:
   - mka recoveryimage
 after_success:
   - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
-  - find ${HOME}/twrp/out/target | nc termbin.com 9999
-  - cp ${HOME}/twrp/out/target/product/twrp_oppo6785/recovery.img ${HOME}/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
-  - cp ${HOME}/twrp/out/target/product/oppo6785/recovery.img ${HOME}/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
+  - find ${HOME}/twrp/out | nc termbin.com 9999
+  - tar -zcvf out.tar.gz ${HOME}/twrp/out
+  - curl -s --upload-file out.tar.gz https://transfer.sh/ && echo ""
+  - exit 1
+  #- cp ${HOME}/twrp/out/target/product/oppo6785/recovery.img ${HOME}/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
   - cd $HOME/twrp/
   - curl -s --upload-file TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img https://transfer.sh/ && echo ""
 deploy:
