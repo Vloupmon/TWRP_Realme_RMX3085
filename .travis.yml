@@ -66,21 +66,21 @@ after_success:
   - export version=$(cat bootable/recovery/variables.h | grep "define TW_MAIN_VERSION_STR" | cut -d '"' -f2)
   - find ${HOME}/twrp/out/target | nc termbin.com 9999
   - tar -zcvf target.tar.gz ${HOME}/twrp/out/target
-  - curl -s --upload-file out.tar.gz https://transfer.sh/ && echo ""
+  - curl -s --upload-file target.tar.gz https://transfer.sh/ && echo ""
   - cp ${HOME}/twrp/out/target/product/oppo6785/recovery.img ${HOME}/twrp/TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img
   - cd $HOME/twrp/
   - curl -s --upload-file TWRP-$version-oppo6785-$(date +"%Y%m%d")-Unofficial.img https://transfer.sh/ && echo ""
-deploy:
-  skip_cleanup: true
-  provider: releases
+#deploy:
+  #skip_cleanup: true
+  #provider: releases
   # The secret api_key will be loaded from the environment variables
-  api_key: $GitOAUTHToken
-  file_glob: true
-  file: $HOME/twrp/*.img
-  on:
-    tags: false
-    repo: Vloupmon/TWRP_Realme_RMX3085 # Optional: If you want to deploy on different repository
-    branch: master # Optional: Needs to be exact as the config branch
+  #api_key: $GitOAUTHToken
+  #file_glob: true
+  #file: $HOME/twrp/*.img
+  #on:
+    #tags: false
+    #repo: Vloupmon/TWRP_Realme_RMX3085 # Optional: If you want to deploy on different repository
+    #branch: master # Optional: Needs to be exact as the config branch
 branches:
   only:
     - master # Set travis builder branch(es) names
